@@ -1,0 +1,144 @@
+<template>
+
+  <div class="login-container">
+
+    <div class="login-form">
+      <div class="title">登&nbsp;&nbsp;&nbsp;&nbsp;录</div>
+      <div class="form">
+        <input v-model="loginForm.username" type="text" placeholder="请输入用户名">
+        <input v-model="loginForm.password" type="password" placeholder="请输入密码" @keydown.enter="handleLogin">
+      </div>
+      <div class="login-btn" @click="handleLogin">登录</div>
+    </div>
+
+  </div>
+
+
+</template>
+
+<script>
+
+import { loginin } from '@/api/user'
+import { MessageBox, Message } from 'element-ui'
+
+
+export default {
+  name: 'Login',
+  data() {
+
+    return {
+      loginForm: {
+        username: '',
+        password: ''
+      },
+      redirect: undefined
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    handleLogin() {
+      if(!this.loginForm.username) {
+        return Message({
+          message: '用户名不能为空！',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else if (!this.loginForm.password) {
+        return Message({
+          message: '密码不能为空！',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+      this.$store.dispatch('user/login', this.loginForm).then(() => {
+        this.$router.push({ path: this.redirect || '/' })
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  ::-webkit-input-placeholder { /* WebKit browsers */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }
+
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }   
+
+  .login-container {
+    width: 100%;
+    height: 100%;
+    background-image: url("./login_bg.jpg");
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-form {
+      width: 390px;
+      height: 420px;
+      border-radius: 8px;
+      padding: 50px 60px;
+      background-color: rgba(255,255,255,0.5);
+
+      .title {
+        text-align: center;
+        font-size: 30px;
+        color: #fff;
+        margin-bottom: 70px;
+      }
+
+      .form {
+        text-align: center;
+
+        input {
+          width: 260px;
+          height: 35px;
+          margin-bottom: 20px;
+          color: #fff;
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid #fff;
+          outline: none;
+        }
+      }
+
+      .login-btn {
+        width: 260px;
+        height: 40px;
+        margin: auto;
+        text-align: center;
+        line-height: 40px;
+        color: #fff;
+        margin-top: 40px;
+        cursor: pointer;
+        background-color: #04599a;
+        background-image: linear-gradient(to right, #0a7ba4 , #04599a);
+      }
+      
+    }
+  }
+
+  
+
+</style>
+
