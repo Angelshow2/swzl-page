@@ -1,42 +1,42 @@
 <template>
   <div class="detail-container">
     <el-dialog
-      title="拾物详情"
+      title="失物详情"
       :visible.sync="dialogVisible"
       width="650px"
       :before-close="handleClose"
       :close-on-click-modal="false"
       top="4vh">
 
-      <img :src="pickData.img_url" class="pick-img">
+      <img :src="lostData.img_url" class="lost-img">
       <div class="content">
         <div class="title">
           <label class="label-class">物品标题：</label>
-          <div>{{ pickData.title }}</div>
+          <div>{{ lostData.title }}</div>
         </div>
         <div class="desc">
           <label class="label-class">物品描述：</label>
-          <div>{{ pickData.desc }}</div>
+          <div>{{ lostData.desc }}</div>
         </div>
         <div class="contcat">
           <label class="label-class">联系方式：</label>
-          <!-- <div>{{ pickData.contcat }}</div> -->
-          <div>************</div>
+          <div>{{ lostData.contcat }}</div>
+          <!-- <div>************</div> -->
         </div>
         <div class="site">
-          <label class="label-class">拾取地点：</label>
-          <div>{{ pickData.site }}</div>
+          <label class="label-class">{{ navActive === 1 ? '拾取地点：' : '丢失地点：' }}</label>
+          <div>{{ lostData.site }}</div>
         </div>
-        <div class="pick-time">
-          <label class="label-class">拾取时间：</label>
-          <div>{{ pickData.occur_time }}</div>
+        <div class="lost-time">
+          <label class="label-class">{{ navActive === 1 ? '拾取时间：' : '丢失时间：' }}</label>
+          <div>{{ navActive === 1 ? lostData.occur_time : lostData.occur_time }}</div>
         </div>
         <div class="publish-time">
           <label class="label-class">发布时间：</label>
-          <div>{{ pickData.publish_time | timeFormat }}</div>
+          <div>{{ lostData.publish_time | timeFormat }}</div>
         </div>
         <div class="btn-group">
-          <el-button @click="claimItem" class="return-btn" type="primary" :disabled="pickData.status===1">{{ btnText }}</el-button>
+          <el-button class="return-btn" type="primary" disabled>{{ btnText }}</el-button>
         </div>
       </div>
 
@@ -49,36 +49,21 @@
 <script>
 
 import { parseTime } from '@/utils/index'
-import { claimItem } from '@/api/pickHall/index'
 
 export default {
   data() {
     return {
       dialogVisible: false,
-      pickData: {},
-      btnText: ''
+      lostData: {},
+      btnText: '',
+      navActive: null
     }
   },
   methods: {
     handleClose(done) {
       done()
     },
-    claimItem() {
-      this.$confirm('确认认领？确认后可在我的认领模块查看对方联系方式，联系拾主认领时请确认物品是否属于你，以防认领错误！')
-        .then(_ => {
-          this.dialogVisible = false
-          claimItem({
-            id: this.pickData.id,
-            accountid: this.$store.state.user.accountid
-          })
-            .then(res =>{
-              console.log(res)
-              this.$emit('update-list')
-            })
-          done();
-        })
-        .catch(_ => {});
-    }
+   
   },
   filters: {
     timeFormat(val) {
@@ -91,7 +76,7 @@ export default {
 <style lang="scss">
   .detail-container {
     
-    .pick-img {
+    .lost-img {
       display: block;
       margin: auto;
       max-width: 300px;
@@ -119,7 +104,7 @@ export default {
         display: flex;
       }
 
-      .pick-time {
+      .lost-time {
         margin-bottom: 15px;
         display: flex;
       }

@@ -29,14 +29,14 @@
         </div>
         <div class="lost-time">
           <label class="label-class">丢失时间：</label>
-          <div>{{ lostData.lost_time }}</div>
+          <div>{{ lostData.occur_time }}</div>
         </div>
         <div class="publish-time">
           <label class="label-class">发布时间：</label>
           <div>{{ lostData.publish_time | timeFormat }}</div>
         </div>
         <div class="btn-group">
-          <el-button @click="returnItem" class="return-btn" type="primary">归还</el-button>
+          <el-button @click="returnItem" class="return-btn" type="primary" :disabled="lostData.status===1">{{ btnText }}</el-button>
         </div>
       </div>
 
@@ -49,12 +49,14 @@
 <script>
 
 import { parseTime } from '@/utils/index'
+import { returnItem } from '@/api/lostHall/index'
 
 export default {
   data() {
     return {
       dialogVisible: false,
-      lostData: {}
+      lostData: {},
+      btnText: ''
     }
   },
   methods: {
@@ -65,6 +67,14 @@ export default {
       this.$confirm('确认归还？确认后可在我的归还模块查看对方联系方式，联系失主归还时请确认物品是否属于他(她)，以防冒领！')
         .then(_ => {
           this.dialogVisible = false
+          returnItem({
+            id: this.lostData.id,
+            accountid: this.$store.state.user.accountid
+          })
+            .then(res => {
+              console.log(res)
+              this.$emit('update-list')
+            })
           done();
         })
         .catch(_ => {});

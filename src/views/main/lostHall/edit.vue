@@ -205,7 +205,7 @@ export default {
             desc: this.lostData.desc,
             itemclass: this.lostData.itemClass,
             img_url: this.lostData.imageUrl,
-            lost_time: this.lostData.lostTime,
+            occur_time: this.lostData.lostTime,
             site: this.lostData.site,
             contcat: this.lostData.contcat,
             account_id: this.$store.state.user.accountid,

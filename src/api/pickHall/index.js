@@ -22,3 +22,11 @@ export function publishPick(data) {
     data
   })
 }
+
+export function claimItem(data) {
+  return request({
+    url: '/item/claimitem',
+    method: 'post',
+    data
+  })
+}

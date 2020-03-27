@@ -22,3 +22,11 @@ export function publishLost(data) {
     data
   })
 }
+
+export function returnItem(data) {
+  return request({
+    url: '/item/returnitem',
+    method: 'post',
+    data
+  })
+}

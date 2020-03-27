@@ -1,22 +1,22 @@
 <template>
   <div>
     <el-dialog
-      title="发布拾物"
+      :title="title"
       :visible.sync="dialogVisible"
       width="650px"
       :before-close="handleClose"
       :close-on-click-modal="false"
       top="2vh">
 
-      <el-form :model="pickData" ref="pickData" label-width="100px" :rules="rules">
+      <el-form :model="formData" ref="formData" label-width="100px" :rules="rules">
         <el-form-item label="物品标题" prop="title">
-          <el-input v-model="pickData.title" type="text" placeholder="请输入标题" style="width: 400px;"></el-input>
+          <el-input :disabled="!btnFlag" v-model="formData.title" type="text" placeholder="请输入标题" style="width: 400px;"></el-input>
         </el-form-item>
         <el-form-item label="物品描述" prop="desc">
-          <el-input type="textarea" v-model="pickData.desc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
+          <el-input :disabled="!btnFlag" type="textarea" v-model="formData.desc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="物品分类" prop="itemClass">
-          <el-select style="width: 200px; margin-right: 20px;" v-model="pickData.itemClass" placeholder="请选择物品分类">
+        <el-form-item label="物品分类" prop="itemclass">
+          <el-select :disabled="!btnFlag" style="width: 200px; margin-right: 20px;" v-model="formData.itemclass" placeholder="请选择物品分类">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -25,37 +25,39 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="拾取地点" prop="site">
-          <el-input v-model="pickData.site" type="text" placeholder="请输入拾取地点" style="width: 400px;"></el-input>
+        <el-form-item :label="text + '地点'" prop="site">
+          <el-input :disabled="!btnFlag" v-model="formData.site" type="text" :placeholder="'请输入' + text + '地点'" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="拾取时间" prop="pickTime">
+        <el-form-item :label="text + '时间'" prop="occur_time">
           <el-date-picker
-            v-model="pickData.pickTime"
+            :disabled="!btnFlag"
+            v-model="formData.occur_time"
             type="datetime"
-            placeholder="请选择拾取时间"
+            :placeholder="'请选择' + text + '时间'"
             value-format="yyyy-MM-dd HH:mm:ss"
             style="width: 200px;">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="联系方式" prop="contcat">
-          <el-input v-model="pickData.contcat" type="text" placeholder="请输入联系方式" style="width: 400px;"></el-input>
+          <el-input :disabled="!btnFlag" v-model="formData.contcat" type="text" placeholder="请输入联系方式" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="物品图片" prop="imageUrl">
+        <el-form-item label="物品图片" prop="img_url">
           <el-upload
+            :disabled="!btnFlag"
             class="avatar-uploader"
             action="http://127.0.0.1:8080/user/pickitemimg"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             name="llj-swzl">
-            <img v-if="pickData.imageUrl" :src="pickData.imageUrl" class="avatar">
+            <img v-if="formData.img_url" :src="formData.img_url" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
 
         <div class="btn-group">
           <el-button @click="cancelPublish">取消</el-button>
-          <el-button @click="publistPick" type="primary">发布</el-button>  
+          <el-button @click="editItem" type="primary" :disabled="!btnFlag">{{ btnText }}</el-button>  
         </div>
 
 
@@ -68,7 +70,7 @@
 
 <script>
 
-import { getItemClass, publishPick } from '@/api/pickHall/index'
+import { getItemClass, updateUserLost, updateUserPick } from '@/api/myPublish/index'
 
 export default {
   data() {
@@ -95,7 +97,7 @@ export default {
     }
     var checkSite = (rule, value, callback) => {
       if(value === '') {
-        return callback(new Error('请填写拾取地点！'))
+        return callback(new Error('请填写' + this.text + '地点！'))
       } else {
         callback()
       }
@@ -107,9 +109,9 @@ export default {
         callback()
       }
     }
-    var checkpickTime = (rule, value, callback) => {
+    var checkOccurTime = (rule, value, callback) => {
       if(value === '') {
-        return callback(new Error('请填写拾取时间！'))
+        return callback(new Error('请填写' + this.text + '时间！'))
       } else {
         callback()
       }
@@ -123,21 +125,25 @@ export default {
     }
     return {
       dialogVisible: false,
+      title: '我的失物',
+      text: '丢失',
+      btnText: '',
+      btnFlag: null,
       options: [],
-      pickData: {
+      formData: {
         title: '',
-        itemClass: null,
+        itemclass: null,
         desc: '',
         site: '',
         contcat: '',
-        pickTime: '',
-        imageUrl: '',
+        occur_time: '',
+        img_url: '',
       },
       rules: {
         title: [
           { validator: checkTitle, trigger: 'blur' }
         ],
-        itemClass: [
+        itemclass: [
           { validator: checkItemClass, trigger: 'blur' }
         ],
         desc: [
@@ -149,10 +155,10 @@ export default {
         contcat: [
           { validator: checkContcat, trigger: 'blur' },
         ],
-        pickTime: [
-          { validator: checkpickTime, trigger: 'blur' },
+        occur_time: [
+          { validator: checkOccurTime, trigger: 'blur' },
         ],
-        imageUrl: [
+        img_url: [
           { validator: checkImgUrl, trigger: 'blur' },
         ]
       }
@@ -163,12 +169,11 @@ export default {
   },
   methods: {
     handleClose(done) {
-      this.dataInit()
-      this.$emit('update-list')
+      // this.$emit('update-list')
       done()
     },
     handleAvatarSuccess(res, file) {
-      this.pickData.imageUrl = res.data
+      this.formData.img_url = res.data
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
@@ -193,46 +198,57 @@ export default {
         })
     },
     cancelPublish() {
-      this.dataInit()
-      this.$emit('update-list')
+      // this.$emit('update-list')
       this.dialogVisible = false
     },
-    publistPick() {
-      this.$refs['pickData'].validate(valid => {
+    editItem() {
+      this.$refs['formData'].validate(valid => {
         if(valid) {
-          publishPick({
-            title: this.pickData.title,
-            desc: this.pickData.desc,
-            itemclass: this.pickData.itemClass,
-            img_url: this.pickData.imageUrl,
-            occur_time: this.pickData.pickTime,
-            site: this.pickData.site,
-            contcat: this.pickData.contcat,
-            account_id: this.$store.state.user.accountid,
-          })
-            .then(res => {
-              console.log(res)
-              this.$emit('update-list')
-              this.dialogVisible = false
-              this.dataInit()
+          if(this.text === '丢失') {
+            updateUserLost({
+              title: this.formData.title,
+              desc: this.formData.desc,
+              itemclass: this.formData.itemclass,
+              img_url: this.formData.img_url,
+              occur_time: this.formData.occur_time,
+              site: this.formData.site,
+              contcat: this.formData.contcat,
+              account_id: this.$store.state.user.accountid,
+              id: this.formData.id
             })
+              .then(res => {
+                console.log(res)
+                this.$emit('update-list')
+                this.dialogVisible = false
+              })
+          } else if(this.text === '拾取') {
+            updateUserPick({
+              title: this.formData.title,
+              desc: this.formData.desc,
+              itemclass: this.formData.itemclass,
+              img_url: this.formData.img_url,
+              occur_time: this.formData.occur_time,
+              site: this.formData.site,
+              contcat: this.formData.contcat,
+              account_id: this.$store.state.user.accountid,
+              id: this.formData.id
+            })
+              .then(res => {
+                console.log(res)
+                this.$emit('update-list')
+                this.dialogVisible = false
+              })
+          }
+          
         } else {
           return false
         }
       })
 
-      
-      
+
     },
-    dataInit() {
-      this.pickData.title = ''
-      this.pickData.itemClass = null
-      this.pickData.desc = ''
-      this.pickData.site = ''
-      this.pickData.contcat = ''
-      this.pickData.pickTime = ''
-      this.pickData.imageUrl = ''
-    }
+
+
   }
 }
 </script>

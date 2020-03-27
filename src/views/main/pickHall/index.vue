@@ -19,7 +19,9 @@
     </div>
     <div v-loading="listLoading" class="pick-list">
       <div v-for="(item, index) in pickList" :key="index" @click="getDetail(item)" class="pick-item">
-        <img class="item-img" :src="item.img_url">
+        <div class="item-img-container">
+          <img class="item-img" :src="item.img_url">
+        </div>  
         <div class="detail">
           <div class="title">{{ item.title }}</div>
           <div class="desc">{{ item.desc }}</div>
@@ -42,7 +44,7 @@
     </el-pagination>
 
     <Edit @update-list="updateList" ref="editData" />
-    <Detail ref="detailData" />
+    <Detail @update-list="updateList" ref="detailData" />
 
   </div>
 </template>
@@ -123,12 +125,19 @@ export default {
     },
     searchList() {
       this.listLoading = true
-      this.getPickList(this.searchData)
+      this.getPickList()
     },
     getDetail(item) {
       console.log(item)
+      let btnText = ''
+      if(item.status === 0){
+        btnText = '认领'
+      } else if (item.status === 1) {
+        btnText = '认领中'
+      }
       this.$refs.detailData.dialogVisible = true
       this.$refs.detailData.pickData = item
+      this.$refs.detailData.btnText = btnText
     }
   },
   
@@ -162,6 +171,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       align-content: start;
+      min-height: 650px;
 
       .pick-item {
         width: 33%;
@@ -171,22 +181,30 @@ export default {
         margin-right: 0.3%;
         border-radius: 3px;
         cursor: pointer;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         padding: 0 25px;
 
-        .item-img {
-          max-width: 130px;
-          max-height: 130px;
-          border-radius: 3px;
+        .item-img-container {
+          width: 130px;
+          height: 130px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .item-img {
+            max-width: 130px;
+            max-height: 130px;
+            border-radius: 3px;
+          }
         }
 
         .detail {
           flex: 1;
           // height: 150px;
           margin-left: 22px;
-          color: #6b5555;
+          color: #606266;
           font-size: 15px;
 
           .title {
@@ -206,20 +224,22 @@ export default {
       }
 
       .pick-item:hover {
+        background-color: #f3f3f3;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.08);
       }
     }
     
     .no-data {
       width: 100%;
-      height: 300px;
+      height: 650px;
       background-color: #fff;
       text-align: center;
-      line-height: 300px;
+      line-height: 650px;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       border-radius: 4px;
       color: #6a6a6a;
+      position: absolute;
+      top: 75px;
     }
   }
 </style>
