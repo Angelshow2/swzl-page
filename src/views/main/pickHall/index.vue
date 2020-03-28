@@ -144,7 +144,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .pickhall-container {
     height: 100%;
     border-radius: 4px;

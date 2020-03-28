@@ -34,7 +34,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .baseinfo-container {
     background-color: #fff;
     height: 768px;

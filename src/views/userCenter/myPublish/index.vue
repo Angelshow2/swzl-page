@@ -14,7 +14,7 @@
           <div class="item-title">{{ i.title }}</div>
           <div class="item-desc">{{ i.desc }}</div>
         </div>
-        <div @click.stop="deleteItem(i.id)" class="el-icon-close delete-btn"></div>
+        <div @click.stop="deleteItem(i.id, i.status)" class="el-icon-close delete-btn"></div>
       </div>
     </div>
 
@@ -145,36 +145,44 @@ export default {
         this.getUserPick()
       }
     },
-    deleteItem(id) {
-      console.log('123')
-      this.$confirm('确认删除？删除后无法恢复！')
-        .then(_ => {
+    deleteItem(id,status) {
+      if(status === 0) {
+         this.$confirm('确认删除？删除后无法恢复！')
+          .then(_ => {
+            if(this.navActive === 1) {
+              deleteUserLost({
+                id,account_id: this.$store.state.user.accountid
+              })
+                .then(res => {
+                  console.log(res)
+                })
+            } else if(this.navActive === 2) {
+              deleteUserPick({
+                id,account_id: this.$store.state.user.accountid
+              })
+                .then(res => {
+                  console.log(res)
+                })
+            }
+            this.updateList()
+            done();
+          })
+          .catch(_ => {});
+        } else {
           if(this.navActive === 1) {
-            deleteUserLost({
-              id,account_id: this.$store.state.user.accountid
-            })
-              .then(res => {
-                console.log(res)
-              })
+            this.$alert('正在归还中或已归还的物品无法删除!','提示')
           } else if(this.navActive === 2) {
-            deleteUserPick({
-              id,account_id: this.$store.state.user.accountid
-            })
-              .then(res => {
-                console.log(res)
-              })
+            this.$alert('正在认领中或已认领的物品无法删除!','提示')
           }
-          this.updateList()
-          done();
-        })
-        .catch(_ => {});
+        }
+     
       
     },
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .mypublish-container {
     // background-color: #fff;
     height: 768px;
@@ -268,15 +276,15 @@ export default {
 
     .no-data {
       width: 100%;
-      height: 650px;
+      height: 550px;
       background-color: #fff;
       text-align: center;
-      line-height: 650px;
+      line-height: 550px;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       border-radius: 4px;
       color: #6a6a6a;
       position: absolute;
-      top: 75px;
+      top: 95px;
     }
 
     
