@@ -20,7 +20,7 @@
     <div v-loading="listLoading" class="pick-list">
       <div v-for="(item, index) in pickList" :key="index" @click="getDetail(item)" class="pick-item">
         <div class="item-img-container">
-          <img class="item-img" :src="item.img_url">
+          <img class="item-img" :src="URL + item.img_url">
         </div>  
         <div class="detail">
           <div class="title">{{ item.title }}</div>
@@ -71,13 +71,15 @@ export default {
         pageNum: 1,
         searchText: '',
         itemClass: null
-      }
+      },
+      URL: ''
     }
   },
   created() {
     this.listLoading = true
     this.getPickList()
     this.getItemClass()
+    this.URL = window.location.origin
   },
   methods: {
     handleCurrentChange(val) {
@@ -112,6 +114,7 @@ export default {
     },
     publishpick() {
       this.$refs.editData.dialogVisible = true
+      this.$refs.editData.URL = this.URL
     },
     updateList() {
       this.searchData = {
@@ -138,6 +141,7 @@ export default {
       this.$refs.detailData.dialogVisible = true
       this.$refs.detailData.pickData = item
       this.$refs.detailData.btnText = btnText
+      this.$refs.detailData.URL = this.URL
     }
   },
   

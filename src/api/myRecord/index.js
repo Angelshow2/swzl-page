@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
-export function getUserReturn(params) {
+export function getUserReturn(data) {
   return request({
     url: '/item/userreturn',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
-export function getUserClaim(params) {
+export function getUserClaim(data) {
   return request({
     url: '/item/userclaim',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 

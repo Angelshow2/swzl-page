@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
-export function getUserLost(params) {
+export function getUserLost(data) {
   return request({
     url: '/item/userlost',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
-export function getUserPick(params) {
+export function getUserPick(data) {
   return request({
     url: '/item/userpick',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
@@ -51,6 +51,6 @@ export function deleteUserPick(data) {
 export function getItemClass(data) {
   return request({
     url: '/item/itemclass',
-    method: 'get'
+    method: 'post'
   })
 }

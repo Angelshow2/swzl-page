@@ -21,7 +21,7 @@
     <div v-loading="listLoading" class="lost-list">
       <div v-for="(item, index) in List" :key="index" @click="getDetail(item)" class="lost-item">
         <div class="item-img-container">
-          <img class="item-img" :src="item.img_url">
+          <img class="item-img" :src="URL + item.img_url">
         </div>
         <div class="detail">
           <div class="title">{{ item.title }}</div>
@@ -70,13 +70,16 @@ export default {
         searchText: '',
         itemClass: null
       },
-      navActive: 1
+      navActive: 1,
+      URL: ''
     }
   },
   created() {
     this.listLoading = true
     this.getClaimList()
     this.getItemClass()
+    this.URL = window.location.origin
+    // console.log(window.location.origin)
   },
   methods: {
     handleCurrentChange(val) {
@@ -147,6 +150,7 @@ export default {
       this.$refs.detailData.lostData = item
       this.$refs.detailData.btnText = btnText
       this.$refs.detailData.navActive = this.navActive
+      this.$refs.detailData.URL = this.URL
     },
     changeToClaim() {
       this.list = []

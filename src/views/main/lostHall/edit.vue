@@ -43,12 +43,12 @@
         <el-form-item label="物品图片" prop="imageUrl">
           <el-upload
             class="avatar-uploader"
-            action="http://127.0.0.1:8080/user/lostitemimg"
+            :action="URL + '/user/lostitemimg'"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             name="llj-swzl">
-            <img v-if="lostData.imageUrl" :src="lostData.imageUrl" class="avatar">
+            <img v-if="lostData.imageUrl" :src="URL + lostData.imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -155,11 +155,14 @@ export default {
         imageUrl: [
           { validator: checkImgUrl, trigger: 'blur' },
         ]
-      }
+      },
+      URL: ''
     };
   },
   created() {
     this.getItemClass()
+    this.URL = window.location.origin
+    // console.log(window.location.origin)
   },
   methods: {
     handleClose(done) {

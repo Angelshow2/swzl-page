@@ -8,7 +8,7 @@
     <div class="list" v-loading="listLoading">
       <div @click="editItem(i)" v-for="i in list" :key="i.id" class="item">
         <div class="item-img-container">
-          <img class="item-img" :src="i.img_url">
+          <img class="item-img" :src="URL + i.img_url">
         </div>  
         <div class="item-content">
           <div class="item-title">{{ i.title }}</div>
@@ -53,11 +53,13 @@ export default {
       listLoading: false,
       pageNum: 1,
       pageSize: 6,
-      totalPage: null
+      totalPage: null,
+      URL: ''
     }
   },
   created() {
     this.getUserLost()
+    this.URL = window.location.origin
   },
   methods: {
     changeToLost() {
@@ -102,6 +104,7 @@ export default {
     },
     editItem(item) {
       this.$refs.editData.dialogVisible = true
+      this.$refs.editData.URL = this.URL
       this.$refs.editData.formData = JSON.parse(JSON.stringify(item))
       if(this.navActive === 1) {
         this.$refs.editData.title = '我的失物'

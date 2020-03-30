@@ -11,7 +11,7 @@ export function getLostList(data) {
 export function getItemClass(data) {
   return request({
     url: '/item/itemclass',
-    method: 'get'
+    method: 'post'
   })
 }
 

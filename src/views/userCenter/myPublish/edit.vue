@@ -45,12 +45,12 @@
           <el-upload
             :disabled="!btnFlag"
             class="avatar-uploader"
-            action="http://127.0.0.1:8080/user/pickitemimg"
+            :action="URL + '/user/lostitemimg'"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             name="llj-swzl">
-            <img v-if="formData.img_url" :src="formData.img_url" class="avatar">
+            <img v-if="formData.img_url" :src="URL + formData.img_url" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -161,11 +161,14 @@ export default {
         img_url: [
           { validator: checkImgUrl, trigger: 'blur' },
         ]
-      }
+      },
+      // URL: ''
     };
   },
   created() {
     this.getItemClass()
+    // this.URL = window.location.origin
+    // console.log(window.location.origin)
   },
   methods: {
     handleClose(done) {
@@ -173,7 +176,7 @@ export default {
       done()
     },
     handleAvatarSuccess(res, file) {
-      this.formData.img_url = res.data
+      this.lostData.imageUrl = res.data
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';

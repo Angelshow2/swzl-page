@@ -8,7 +8,7 @@
       :close-on-click-modal="false"
       top="4vh">
 
-      <img :src="formData.img_url" class="lost-img">
+      <img :src="URL + formData.img_url" class="lost-img">
       <div class="content">
         <div class="title">
           <label class="label-class">物品标题：</label>

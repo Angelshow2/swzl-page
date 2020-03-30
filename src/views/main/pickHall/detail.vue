@@ -8,7 +8,7 @@
       :close-on-click-modal="false"
       top="4vh">
 
-      <img :src="pickData.img_url" class="pick-img">
+      <img :src="URL + pickData.img_url" class="pick-img">
       <div class="content">
         <div class="title">
           <label class="label-class">物品标题：</label>

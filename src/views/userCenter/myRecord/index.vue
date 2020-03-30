@@ -8,7 +8,7 @@
     <div class="list" v-loading="listLoading">
       <div @click="itemDetail(i)" v-for="i in list" :key="i.id" class="item">
         <div class="item-img-container">
-          <img class="item-img" :src="i.img_url">
+          <img class="item-img" :src="URL + i.img_url">
         </div>  
         <div class="item-content">
           <div class="item-title">{{ i.title }}</div>
@@ -53,11 +53,13 @@ export default {
       listLoading: false,
       pageNum: 1,
       pageSize: 6,
-      totalPage: null
+      totalPage: null,
+      URL: ''
     }
   },
   created() {
     this.getUserReturn()
+    this.URL = window.location.origin
   },
   methods: {
     changeToLost() {
@@ -102,6 +104,7 @@ export default {
     },
     itemDetail(item) {
       this.$refs.detailData.dialogVisible = true
+      this.$refs.detailData.URL = this.URL
       this.$refs.detailData.btnTextt = ''
       this.$refs.detailData.btnTexttt = ''
       this.$refs.detailData.formData = JSON.parse(JSON.stringify(item))
@@ -128,35 +131,6 @@ export default {
         }
       }
     },
-    // editItem(item) {
-    //   this.$refs.editData.dialogVisible = true
-    //   this.$refs.editData.formData = JSON.parse(JSON.stringify(item))
-    //   if(this.navActive === 1) {
-    //     this.$refs.editData.title = '我的失物'
-    //     this.$refs.editData.text = '丢失'
-    //     if(item.status === 1) {
-    //       this.$refs.editData.btnText = '归还中'
-    //       this.$refs.editData.btnFlag = false
-    //     } else if(item.status === 2) {
-    //       this.$refs.editData.btnText = '已归还'
-    //       this.$refs.editData.btnFlag = false
-    //     }
-    //   } else if(this.navActive === 2) {
-    //     this.$refs.editData.title = '我的拾物'
-    //     this.$refs.editData.text = '拾取'
-    //     if(item.status === 1) {
-    //       this.$refs.editData.btnText = '认领中'
-    //       this.$refs.editData.btnFlag = false
-    //     } else if(item.status === 2) {
-    //       this.$refs.editData.btnText = '已认领'
-    //       this.$refs.editData.btnFlag = false
-    //     }
-    //   }
-    //   if(item.status === 0) {
-    //     this.$refs.editData.btnText = '修改'
-    //     this.$refs.editData.btnFlag = true
-    //   }
-    // },
     handleCurrentChange() {
       this.listLoading = true
       if(this.navActive === 1) {
