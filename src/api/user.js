@@ -8,13 +8,46 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getDepartList(data) {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/user/departlist',
+    method: 'post'
   })
 }
+
+export function getMajorList(data) {
+  return request({
+    url: '/user/majorlist',
+    method: 'post',
+    data
+  })
+}
+
+export function register(data) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data
+  })
+}
+
+export function getUserInfo(data) {
+  return request({
+    url: '/item/userinfo',
+    method: 'post',
+    data
+  })
+}
+
+
+
+// export function getInfo(token) {
+//   return request({
+//     url: '/user/info',
+//     method: 'get',
+//     params: { token }
+//   })
+// }
 
 
 

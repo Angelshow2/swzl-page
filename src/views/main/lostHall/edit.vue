@@ -69,6 +69,7 @@
 <script>
 
 import { getItemClass, publishLost } from '@/api/lostHall/index'
+import { Message } from 'element-ui'
 
 export default {
   data() {
@@ -168,6 +169,7 @@ export default {
     handleClose(done) {
       this.dataInit()
       this.$emit('update-list')
+      this.$emit('destory')
       done()
     },
     handleAvatarSuccess(res, file) {
@@ -197,7 +199,8 @@ export default {
     },
     cancelPublish() {
       this.dataInit()
-      this.$emit('update-list')
+      // this.$emit('update-list')
+      this.$emit('destory')
       this.dialogVisible = false
     },
     publishLost() {
@@ -215,7 +218,13 @@ export default {
           })
             .then(res => {
               console.log(res)
+              Message({
+                message: '发布成功!',
+                type: 'success',
+                duration: 2 * 1000
+              })
               this.$emit('update-list')
+              this.$emit('destory')
               this.dialogVisible = false
               this.dataInit()
             })

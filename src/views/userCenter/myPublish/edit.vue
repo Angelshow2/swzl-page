@@ -71,6 +71,7 @@
 <script>
 
 import { getItemClass, updateUserLost, updateUserPick } from '@/api/myPublish/index'
+import { Message } from 'element-ui'
 
 export default {
   data() {
@@ -162,7 +163,7 @@ export default {
           { validator: checkImgUrl, trigger: 'blur' },
         ]
       },
-      // URL: ''
+      URL: ''
     };
   },
   created() {
@@ -173,6 +174,7 @@ export default {
   methods: {
     handleClose(done) {
       // this.$emit('update-list')
+      this.$emit('destory')
       done()
     },
     handleAvatarSuccess(res, file) {
@@ -202,6 +204,7 @@ export default {
     },
     cancelPublish() {
       // this.$emit('update-list')
+      this.$emit('destory')
       this.dialogVisible = false
     },
     editItem() {
@@ -221,7 +224,13 @@ export default {
             })
               .then(res => {
                 console.log(res)
+                Message({
+                  message: '修改成功!',
+                  type: 'success',
+                  duration: 2 * 1000
+                })
                 this.$emit('update-list')
+                this.$emit('destory')
                 this.dialogVisible = false
               })
           } else if(this.text === '拾取') {
@@ -238,7 +247,13 @@ export default {
             })
               .then(res => {
                 console.log(res)
+                Message({
+                  message: '修改成功!',
+                  type: 'success',
+                  duration: 2 * 1000
+                })
                 this.$emit('update-list')
+                this.$emit('destory')
                 this.dialogVisible = false
               })
           }

@@ -48,17 +48,58 @@
   box-sizing: content-box;
 }
 
-
-.feedback-container {
-  .el-input__inner {
-    border-radius: 25px;
-  }
-}
-
 .el-table th.gutter{
   display: table-cell!important;
 }
 
 .el-textarea .el-textarea__inner{ 
   resize: none;
+}
+
+.register-container {
+  .el-input__inner {
+    width: 260px;
+    height: 35px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    border-bottom: 1px solid #fff;
+    border-radius: 0;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .el-input,.el-input--suffix {
+    margin-bottom: 15px;
+  }
+
+  .el-select .el-input .el-select__caret {
+    color: #fff;
+  }
+
+  ::-webkit-input-placeholder { /* WebKit browsers */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }
+
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: rgba(255,255,255,0.4);
+    font-size: 16px;
+  }  
+
+  .el-select .el-input.is-focus .el-input__inner {
+    border-color: #fff;
+  }
+  .el-select .el-input__inner:focus {
+    border-color: #fff;
+  }
+  .el-select:hover .el-input__inner {
+    border-color: #fff;
+  }
+
 }

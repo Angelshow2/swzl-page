@@ -32,7 +32,7 @@
       style="text-align: right; margin-top: 8px;">
     </el-pagination>
 
-    <Edit @update-list="updateList" ref="editData" />
+    <Edit v-if="editFlag" @destory="destoryEdit" @update-list="updateList" ref="editData" />
     
   </div>
 </template>
@@ -54,7 +54,8 @@ export default {
       pageNum: 1,
       pageSize: 6,
       totalPage: null,
-      URL: ''
+      URL: '',
+      editFlag: false
     }
   },
   created() {
@@ -103,34 +104,37 @@ export default {
         })
     },
     editItem(item) {
-      this.$refs.editData.dialogVisible = true
-      this.$refs.editData.URL = this.URL
-      this.$refs.editData.formData = JSON.parse(JSON.stringify(item))
-      if(this.navActive === 1) {
-        this.$refs.editData.title = '我的失物'
-        this.$refs.editData.text = '丢失'
-        if(item.status === 1) {
-          this.$refs.editData.btnText = '归还中'
-          this.$refs.editData.btnFlag = false
-        } else if(item.status === 2) {
-          this.$refs.editData.btnText = '已归还'
-          this.$refs.editData.btnFlag = false
+      this.editFlag = true
+      this.$nextTick(() => {
+        this.$refs.editData.dialogVisible = true
+        this.$refs.editData.URL = this.URL
+        this.$refs.editData.formData = JSON.parse(JSON.stringify(item))
+        if(this.navActive === 1) {
+          this.$refs.editData.title = '我的失物'
+          this.$refs.editData.text = '丢失'
+          if(item.status === 1) {
+            this.$refs.editData.btnText = '归还中'
+            this.$refs.editData.btnFlag = false
+          } else if(item.status === 2) {
+            this.$refs.editData.btnText = '已归还'
+            this.$refs.editData.btnFlag = false
+          }
+        } else if(this.navActive === 2) {
+          this.$refs.editData.title = '我的拾物'
+          this.$refs.editData.text = '拾取'
+          if(item.status === 1) {
+            this.$refs.editData.btnText = '认领中'
+            this.$refs.editData.btnFlag = false
+          } else if(item.status === 2) {
+            this.$refs.editData.btnText = '已认领'
+            this.$refs.editData.btnFlag = false
+          }
         }
-      } else if(this.navActive === 2) {
-        this.$refs.editData.title = '我的拾物'
-        this.$refs.editData.text = '拾取'
-        if(item.status === 1) {
-          this.$refs.editData.btnText = '认领中'
-          this.$refs.editData.btnFlag = false
-        } else if(item.status === 2) {
-          this.$refs.editData.btnText = '已认领'
-          this.$refs.editData.btnFlag = false
+        if(item.status === 0) {
+          this.$refs.editData.btnText = '修改'
+          this.$refs.editData.btnFlag = true
         }
-      }
-      if(item.status === 0) {
-        this.$refs.editData.btnText = '修改'
-        this.$refs.editData.btnFlag = true
-      }
+      })
     },
     handleCurrentChange() {
       this.listLoading = true
@@ -181,6 +185,9 @@ export default {
      
       
     },
+     destoryEdit() {
+      this.editFlag = false
+    }
   }
 }
 </script>
@@ -249,15 +256,25 @@ export default {
 
         .item-content {
           flex: 1;
+          max-width: 65%;
 
           .item-title {
             line-height: 30px;
+            max-width: 345px;
             border-bottom: 1px solid #e5e5e5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
 
           .item-desc {
             padding-top: 5px;
-            height: 70px;
+            height: 78px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            -webkit-line-clamp: 4;
           }
         }
 
@@ -278,7 +295,7 @@ export default {
     }
 
     .no-data {
-      width: 100%;
+      width: 93%;
       height: 550px;
       background-color: #fff;
       text-align: center;

@@ -4,8 +4,8 @@ import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: sessionStorage.getItem("name"),
-  accountid: sessionStorage.getItem("accountid")
+  name: localStorage.getItem("name"),
+  accountid: localStorage.getItem("accountid")
 }
 
 const mutations = {
@@ -31,7 +31,8 @@ const actions = {
         commit('SET_TOKEN', data.token)
         commit('SET_NAME', data.name)
         commit('SET_ACCOUNTID', data.accountid)
-        sessionStorage.setItem("accountid",data.accountid);
+        localStorage.setItem("accountid",data.accountid);
+        localStorage.setItem("name",data.name);
         setToken(data.token)
         resolve()
       }).catch(error => {
@@ -66,6 +67,8 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       removeToken()
+      localStorage.removeItem('name')
+      localStorage.removeItem('accountid')
       resolve()
     })
   }

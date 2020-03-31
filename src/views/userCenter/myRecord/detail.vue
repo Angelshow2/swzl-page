@@ -37,8 +37,8 @@
         </div>
         <div class="btn-group">
           <el-button class="return-btn" type="primary" disabled>{{ btnText }}</el-button>
-          <el-button class="return-btn" v-if="btnTexttt">{{ btnTexttt }}</el-button>
-          <el-button class="return-btn" v-if="btnTextt">{{ btnTextt }}</el-button>
+          <el-button class="return-btn" v-if="btnTexttt" @click="cancelOperation">{{ btnTexttt }}</el-button>
+          <el-button class="return-btn" v-if="btnTextt" @click="succeedOperation">{{ btnTextt }}</el-button>
         </div>
       </div>
 
@@ -51,7 +51,8 @@
 <script>
 
 import { parseTime } from '@/utils/index'
-import { returnItem } from '@/api/lostHall/index'
+import { cancelReturn, cancelClaim, returnSucceed, claimSucceed } from '@/api/myRecord/index'
+import { Message } from 'element-ui'
 
 export default {
   data() {
@@ -63,28 +64,79 @@ export default {
       btnTexttt: '',
       title: '失物详情',
       text: '丢失',
+      URL: ''
     }
   },
   methods: {
     handleClose(done) {
       done()
     },
-    // returnItem() {
-    //   this.$confirm('确认归还？确认后可在我的归还模块查看对方联系方式，联系失主归还时请确认物品是否属于他(她)，以防冒领！')
-    //     .then(_ => {
-    //       this.dialogVisible = false
-    //       returnItem({
-    //         id: this.formData.id,
-    //         accountid: this.$store.state.user.accountid
-    //       })
-    //         .then(res => {
-    //           console.log(res)
-    //           this.$emit('update-list')
-    //         })
-    //       done();
-    //     })
-    //     .catch(_ => {});
-    // }
+    cancelOperation() {
+      if(this.text === '丢失') {
+        cancelReturn({
+          account_id: this.$store.state.user.accountid,
+          id: this.formData.id
+        })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '取消归还成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.success()
+        })
+      } else if(this.text === '拾取') {
+        cancelClaim({
+          account_id: this.$store.state.user.accountid,
+          id: this.formData.id
+        })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '取消认领成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.success()
+        })
+      }
+    },
+    succeedOperation() {
+      if(this.text === '丢失') {
+        returnSucceed({
+          account_id: this.$store.state.user.accountid,
+          id: this.formData.id
+        })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '归还成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.success()
+        })
+      } else if(this.text === '拾取') {
+        claimSucceed({
+          account_id: this.$store.state.user.accountid,
+          id: this.formData.id
+        })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '认领成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.success()
+        })
+      }
+    },
+    success() {
+      this.dialogVisible = false
+      this.$emit('update-list')
+    }
   },
   filters: {
     timeFormat(val) {

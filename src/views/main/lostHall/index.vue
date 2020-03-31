@@ -43,7 +43,7 @@
       style="text-align: right; margin-top: 8px;">
     </el-pagination>
 
-    <Edit @update-list="updateList" ref="editData" />
+    <Edit v-if="editFlag" @destory="destoryEdit" @update-list="updateList" ref="editData" />
     <Detail @update-list="updateList" ref="detailData" />
 
   </div>
@@ -72,7 +72,8 @@ export default {
         searchText: '',
         itemClass: null
       },
-      URL: ''
+      URL: '',
+      editFlag: false
     }
   },
   created() {
@@ -113,8 +114,12 @@ export default {
         })
     },
     publishLost() {
-      this.$refs.editData.dialogVisible = true
-      this.$refs.editData.URL = this.URL
+      this.editFlag = true
+      this.$nextTick(() => {
+        this.$refs.editData.dialogVisible = true
+        this.$refs.editData.URL = this.URL
+      })
+      
     },
     updateList() {
       this.searchData = {
@@ -142,6 +147,9 @@ export default {
       this.$refs.detailData.lostData = item
       this.$refs.detailData.btnText = btnText
       this.$refs.detailData.URL = this.URL
+    },
+    destoryEdit() {
+      this.editFlag = false
     }
   },
   

@@ -38,6 +38,12 @@ export const constantRoutes = [
   },
 
   {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  },
+
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -46,7 +52,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/main/statistics'
+    redirect: '/main/losthall'
   },
 
   {
@@ -55,12 +61,12 @@ export const constantRoutes = [
     name: 'Main',
     meta: { title: 'LOST & FOUND' },
     children: [
-      {
-        path: 'statistics',
-        name: 'Statistics',
-        component: () => import('@/views/statistics/index'),
-        meta: { title: '统计分析' }
-      },
+      // {
+      //   path: 'statistics',
+      //   name: 'Statistics',
+      //   component: () => import('@/views/statistics/index'),
+      //   meta: { title: '统计分析' }
+      // },
       {
         path: 'losthall',
         name: 'Losthall',
@@ -109,32 +115,32 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/system',
-    component: Layout,
-    name: 'System',
-    meta: { title: '系统管理' },
-    children: [
-      {
-        path: 'usermanagement',
-        name: 'Usermanagement',
-        component: () => import('@/views/system/userManagement/index'),
-        meta: { title: '用户管理' }
-      },
-      {
-        path: 'itemmanagement',
-        name: 'Itemmanagement',
-        component: () => import('@/views/system/itemManagement/index'),
-        meta: { title: '物品管理' }
-      },
-      {
-        path: 'dictmanagement',
-        name: 'Dictmanagement',
-        component: () => import('@/views/system/dictManagement/index'),
-        meta: { title: '字典管理' }
-      }
-    ]
-  },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   name: 'System',
+  //   meta: { title: '系统管理' },
+  //   children: [
+  //     {
+  //       path: 'usermanagement',
+  //       name: 'Usermanagement',
+  //       component: () => import('@/views/system/userManagement/index'),
+  //       meta: { title: '用户管理' }
+  //     },
+  //     {
+  //       path: 'itemmanagement',
+  //       name: 'Itemmanagement',
+  //       component: () => import('@/views/system/itemManagement/index'),
+  //       meta: { title: '物品管理' }
+  //     },
+  //     {
+  //       path: 'dictmanagement',
+  //       name: 'Dictmanagement',
+  //       component: () => import('@/views/system/dictManagement/index'),
+  //       meta: { title: '字典管理' }
+  //     }
+  //   ]
+  // },
 
   
 

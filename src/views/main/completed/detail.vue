@@ -56,7 +56,8 @@ export default {
       dialogVisible: false,
       lostData: {},
       btnText: '',
-      navActive: null
+      navActive: null,
+      URL: ''
     }
   },
   methods: {

@@ -50,13 +50,15 @@
 
 import { parseTime } from '@/utils/index'
 import { returnItem } from '@/api/lostHall/index'
+import { Message } from 'element-ui'
 
 export default {
   data() {
     return {
       dialogVisible: false,
       lostData: {},
-      btnText: ''
+      btnText: '',
+      URL: ''
     }
   },
   methods: {
@@ -73,6 +75,11 @@ export default {
           })
             .then(res => {
               console.log(res)
+              Message({
+                message: '成功!',
+                type: 'success',
+                duration: 2 * 1000
+              })
               this.$emit('update-list')
             })
           done();

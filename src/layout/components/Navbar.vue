@@ -17,7 +17,7 @@ import { parseTime } from "@/utils/index"
 
 export default {
   created() {
-    sessionStorage.setItem("name",this.username);
+    
   },
   methods: {
     async logout() {

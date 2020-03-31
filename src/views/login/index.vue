@@ -7,6 +7,10 @@
       <div class="form">
         <input v-model="loginForm.username" type="text" placeholder="请输入用户名">
         <input v-model="loginForm.password" type="password" placeholder="请输入密码" @keydown.enter="handleLogin">
+        <div class="tip">
+          <div class="forget" @click="forget">忘记密码</div>
+          <div class="register">没有账号?去 <router-link to="/register" style="color:#04599a;">注册</router-link></div>
+        </div>
       </div>
       <div class="login-btn" @click="handleLogin">登录</div>
     </div>
@@ -19,8 +23,7 @@
 <script>
 
 import { loginin } from '@/api/user'
-import { MessageBox, Message } from 'element-ui'
-
+import { Message } from 'element-ui'
 
 export default {
   name: 'Login',
@@ -62,6 +65,13 @@ export default {
         this.loading = false
       }).catch(() => {
         this.loading = false
+      })
+    },
+    forget() {
+      Message({
+        message: '请联系管理员处理! 管理员微信: llj981055641 ',
+        type: 'info',
+        duration: 5 * 1000
       })
     }
   }
@@ -119,6 +129,22 @@ export default {
           border: none;
           border-bottom: 1px solid #fff;
           outline: none;
+        }
+
+        .tip {
+          display: flex;
+          justify-content: space-between;
+          font-size: 12px;
+          padding: 0 5px;
+          color: #fff;
+
+          .forget {
+            cursor: pointer;
+          }
+
+          .register {
+            // cursor: pointer;
+          }
         }
       }
 

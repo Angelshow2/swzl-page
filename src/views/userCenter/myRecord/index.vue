@@ -147,39 +147,7 @@ export default {
         this.getUserClaim()
       }
     },
-    // deleteItem(id,status) {
-      // if(status === 0) {
-      //    this.$confirm('确认删除？删除后无法恢复！')
-      //     .then(_ => {
-      //       if(this.navActive === 1) {
-      //         deleteUserLost({
-      //           id,account_id: this.$store.state.user.accountid
-      //         })
-      //           .then(res => {
-      //             console.log(res)
-      //           })
-      //       } else if(this.navActive === 2) {
-      //         deleteUserPick({
-      //           id,account_id: this.$store.state.user.accountid
-      //         })
-      //           .then(res => {
-      //             console.log(res)
-      //           })
-      //       }
-      //       this.updateList()
-      //       done();
-      //     })
-      //     .catch(_ => {});
-      //   } else {
-      //     if(this.navActive === 1) {
-      //       this.$alert('正在归还中或已归还的物品无法删除!','提示')
-      //     } else if(this.navActive === 2) {
-      //       this.$alert('正在认领中或已认领的物品无法删除!','提示')
-      //     }
-      //   }
-     
-      
-    // },
+    
   }
 }
 </script>
@@ -248,15 +216,25 @@ export default {
 
         .item-content {
           flex: 1;
+          max-width: 65%;
 
           .item-title {
             line-height: 30px;
+            max-width: 345px;
             border-bottom: 1px solid #e5e5e5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
 
           .item-desc {
             padding-top: 5px;
-            height: 70px;
+            height: 78px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            -webkit-line-clamp: 4;
           }
         }
 
