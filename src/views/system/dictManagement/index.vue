@@ -141,10 +141,6 @@
 
         </div>
 
-
-
-
-
       </div>
       <!-- 删除窗口 -->
       <div class="dic-dialog-delete" v-if="dialogFlagThree">
@@ -198,8 +194,109 @@
       <div class="dep-shade" v-if="shadeFlag"></div>
     </div>
 
-    <div class="dictMan-item">
+    <div class="dictMan-item" v-loading="listLoadingTwo">
       <div class="title">物品分类管理</div>
+      <div class="depart-container"> 
+        <el-tree
+          style="margin-top: 0;"
+          class="tree-container"
+          default-expand-all
+          :data="itemClassList"
+          :props="defaultProps"
+          accordion
+          @node-click="handleNodeClick">
+        </el-tree>
+        <div class="btn-group">
+          <div class="btn-item btn-add" @click="addClass">新增</div>
+          <div class="btn-item btn-edit" @click="editClass">修改</div>
+          <div class="btn-item btn-delete" @click="deleteClass">删除</div>
+        </div>
+      </div>
+
+      <!-- 新增分类 -->
+      <!-- 
+        分类名称
+        分类值
+       -->
+      <div class="add-class-dialog" v-if="classDialogFlagOne">
+        <div class="close el-icon-close" @click="cancelClassAdd"></div>
+        <div class="class-dialog-title">新增分类</div>
+        <div class="depart-content">
+          <div class="depart-content-item">
+            <div class="depart-item-tit">分类名称</div>
+            <el-input v-model="addClassData.label" size="mini" style="width: 60%;" placeholder="请输入分类名称"></el-input>
+          </div>
+          <div class="depart-content-item">
+            <div class="depart-item-tit">值</div>
+            <el-input v-model="addClassData.value" size="mini" style="width: 60%;" placeholder="请输入分类名称"></el-input>
+          </div>
+          <div class="depart-btn-group">
+            <div class="depart-btn depart-btn-cancel" @click="cancelClassAdd">取消</div>
+            <div class="depart-btn depart-btn-sure" @click="sureAddClass">确认</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 修改分类 -->
+      <!-- 
+        原来分类值
+        新分类名称
+       -->
+      <div class="edit-class-dialog" v-if="classDialogFlagTwo">
+        <div class="close el-icon-close" @click="cancelClassEdit"></div>
+        <div class="class-dialog-title">修改分类</div>
+        <div class="depart-content">
+          <div class="depart-content-item">
+            <div class="depart-item-tit">分类名称</div>
+            <el-select v-model="editClassData.oldValue" placeholder="请选择" size="mini" style="width: 60%;">
+              <el-option
+                v-for="item in itemClass"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="depart-content-item">
+            <div class="depart-item-tit">新的名称</div>
+            <el-input v-model="editClassData.label" size="mini" style="width: 60%;" placeholder="请输入新的名称"></el-input>
+          </div>
+          <div class="depart-btn-group">
+            <div class="depart-btn depart-btn-cancel" @click="cancelClassEdit">取消</div>
+            <div class="depart-btn depart-btn-sure" @click="sureEditClass">确认</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 删除分类 -->
+      <!-- 
+        分类值
+       -->
+      <div class="delete-class-dialog" v-if="classDialogFlagThree">
+        <div class="close el-icon-close" @click="cancelClassDelete"></div>
+        <div class="class-dialog-title">删除分类</div>
+        <div class="depart-content" style="margin-top: 75px;">
+          <div class="depart-content-item">
+            <div class="depart-item-tit">分类名称</div>
+            <el-select v-model="deleteClassData.value" placeholder="请选择" size="mini" style="width: 60%;">
+              <el-option
+                v-for="item in itemClass"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="depart-btn-group" style="margin-top: 85px;">
+            <div class="depart-btn depart-btn-cancel" @click="cancelClassDelete">取消</div>
+            <div class="depart-btn depart-btn-sure" @click="sureDeleteClass">确认</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 遮罩 -->
+      <div class="dep-shade" v-if="shadeFlagTwo"></div>
+
     </div>
   </div>
 </template>
@@ -207,7 +304,8 @@
 <script>
 
 import { getDepartList, getMajorList } from '@/api/user.js'
-import { newMajor, newDepart, editDepart, editMajor, deleteDepart, deleteMajor } from '@/api/system/index.js'
+import { getItemClass } from '@/api/lostHall/index'
+import { newMajor, newDepart, editDepart, editMajor, deleteDepart, deleteMajor, addClass, editClass, deleteClass } from '@/api/system/index.js'
 import { Message } from 'element-ui'
 
 export default {
@@ -215,15 +313,27 @@ export default {
     return {
       departMajorList: [],
       deparList: [],
+      itemClass: [],
+      itemClassList: [
+        {
+          label: '物品分类',
+          children: []
+        }
+      ],
       defaultProps: {
         children: 'children',
         label: 'label'
       },
       listLoadingOne: false,
+      listLoadingTwo: false,
       dialogFlagOne: false,
       dialogFlagTwo: false,
       dialogFlagThree: false,
+      classDialogFlagOne: false,
+      classDialogFlagTwo: false,
+      classDialogFlagThree: false,
       shadeFlag: false,
+      shadeFlagTwo: false,
       navActive: 1,
       navActiveEdit: 1,
       navActiveDelete: 1,
@@ -255,12 +365,26 @@ export default {
         oldValue: null,
         editMajor: null
       },
+      addClassData: {
+        label: '',
+        value: null
+      },
+      editClassData: {
+        label: '',
+        oldValue: null
+      },
+      deleteClassData: {
+        value: null
+      }
       
     }
   },
   created() {
     this.listLoadingOne = true
+    this.listLoadingTwo = true
+    
     this.getDepartList()
+    this.getItemClass()
   },
   methods: {
     handleNodeClick(data) {
@@ -367,6 +491,20 @@ export default {
       this.shadeFlag = false
     },
     sureAddDepart() {
+      if(!this.addDepartData.label) {
+        return Message({
+          message: '院系名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.addDepartData.value) {
+        return Message({
+          message: '院系值不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
       newDepart({
         account_id: this.$store.state.user.accountid,
         ...this.addDepartData
@@ -384,6 +522,27 @@ export default {
         })
     },
     sureAddMajor() {
+      if(!this.addMajorData.depart) {
+        return Message({
+          message: '所属院系不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.addMajorData.label) {
+        return Message({
+          message: '专业名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.addMajorData.value) {
+        return Message({
+          message: '专业值不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
       newMajor({
         account_id: this.$store.state.user.accountid,
         ...this.addMajorData
@@ -401,7 +560,13 @@ export default {
         })
     },
     sureDeleteDepart() {
-      console.log(this.deleteDepartData)
+      if(!this.deleteDepartData.oldValue) {
+        return Message({
+          message: '院系不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
       deleteDepart({
         account_id: this.$store.state.user.accountid,
         oldValue: this.deleteDepartData.oldValue
@@ -419,7 +584,14 @@ export default {
         })
     },
     sureDeleteMajor() {
-      console.log(this.deleteMajorData)
+      if(!this.deleteMajorData.oldValue) {
+        return Message({
+          message: '专业不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+     
       deleteMajor({
         account_id: this.$store.state.user.accountid,
         oldValue: this.deleteMajorData.oldValue
@@ -444,6 +616,27 @@ export default {
       this.deleteDepartData.value = e
     },
     sureEditDepart() {
+      if(!this.editDepartData.oldValue) {
+        return Message({
+          message: '所要修改院系不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.editDepartData.label) {
+        return Message({
+          message: '院系名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.editDepartData.value) {
+        return Message({
+          message: '院系值不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
       editDepart({
         account_id: this.$store.state.user.accountid,
         ...this.editDepartData
@@ -461,6 +654,27 @@ export default {
         })
     },
     sureEditMajor() {
+      if(!this.editMajorData.editMajor) {
+        return Message({
+          message: '所要修改专业不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.editMajorData.label) {
+        return Message({
+          message: '专业名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.editMajorData.value) {
+        return Message({
+          message: '专业值不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
       editMajor({
         account_id: this.$store.state.user.accountid,
         ...this.editMajorData
@@ -483,7 +697,140 @@ export default {
     },
     deleteMajorChange(e) {
       this.deleteMajorData.oldValue = e[1]
-    }
+    },
+    getItemClass() {
+      getItemClass()
+        .then(res => {
+          console.log(res)
+          this.itemClass = res.data
+          this.itemClassList[0].children = res.data
+          this.listLoadingTwo = false
+        })
+    },
+    addClass() {
+      console.log('111')
+      this.classDialogFlagOne = true
+      this.shadeFlagTwo = true
+    },
+    editClass() {
+      console.log('222')
+      this.classDialogFlagTwo = true
+      this.shadeFlagTwo = true
+    },
+    deleteClass() {
+      console.log('333')
+      this.classDialogFlagThree = true
+      this.shadeFlagTwo = true
+    },
+    cancelClassAdd() {
+      this.classDialogFlagOne = false
+      this.shadeFlagTwo = false
+      this.addClassData = {
+        label: '',
+        value: null
+      }
+    },
+    cancelClassEdit() {
+      this.classDialogFlagTwo = false
+      this.shadeFlagTwo = false
+      this.editClassData = {
+        label: '',
+        oldValue: null
+      }
+    },
+    cancelClassDelete() {
+      this.classDialogFlagThree = false
+      this.shadeFlagTwo = false
+      this.deleteClassData = {
+        value: null
+      }
+    },
+    sureAddClass() {
+      if(!this.addClassData.label) {
+        return Message({
+          message: '分类名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.addClassData.value) {
+        return Message({
+          message: '分类值不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      addClass({
+        account_id: this.$store.state.user.accountid,
+        ...this.addClassData
+      })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '新增成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.cancelClassAdd()
+          this.listLoadingTwo = true
+          this.getItemClass()
+        })
+    },
+    sureEditClass() {
+      if(!this.editClassData.label) {
+        return Message({
+          message: '分类名称不能为空!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      if(!this.editClassData.oldValue) {
+        return Message({
+          message: '请选择分类!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      editClass({
+        account_id: this.$store.state.user.accountid,
+        ...this.editClassData
+      })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '修改成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.cancelClassEdit()
+          this.listLoadingTwo = true
+          this.getItemClass()
+        })
+    },
+    sureDeleteClass() {
+      if(!this.deleteClassData.value) {
+        return Message({
+          message: '请选择分类!',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      }
+      deleteClass({
+        account_id: this.$store.state.user.accountid,
+        ...this.deleteClassData
+      })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '修改成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.cancelClassDelete()
+          this.listLoadingTwo = true
+          this.getItemClass()
+        })
+    },
   },
 }
 </script>
@@ -638,6 +985,75 @@ export default {
       }
       
     }
+
+    .add-class-dialog, .edit-class-dialog, .delete-class-dialog {
+      width: 60%;
+      min-height: 300px;
+      background-color: #fff;
+      position: absolute;
+      top: 150px;
+      margin-left: 50%;
+      left: -30%;
+      z-index: 11;
+      padding: 7px;
+      text-align: right;
+
+      .close {
+        cursor: pointer;
+        position: relative;
+        right: 0;
+      }
+
+      .class-dialog-title {
+        text-align: center;
+      }
+
+      .depart-content {
+        margin-top: 50px;
+
+        .depart-content-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20px;
+
+          .depart-item-tit {
+            font-size: 14px;
+            min-width: 80px;
+            margin-right: 10px;
+          }
+        }
+      }
+      
+      .depart-btn-group {
+        width: 45%;
+        line-height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: auto;
+        margin-top: 40px;
+
+        .depart-btn {
+          width: 40%;
+          text-align: center;
+          border-radius: 3px;
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        .depart-btn-cancel {
+          border: 1px solid #e5e5e5;
+        }
+
+        .depart-btn-sure {
+          color: #fff;
+          background-color: #409EFF;
+        }
+      }
+
+    }
+
+    
   }
 }
   

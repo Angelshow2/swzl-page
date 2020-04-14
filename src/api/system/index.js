@@ -134,3 +134,27 @@ export function deleteMajor(data) {
     data
   })
 }
+
+export function addClass(data) {
+  return request({
+    url: '/item/addclass',
+    method: 'post',
+    data
+  })
+}
+
+export function editClass(data) {
+  return request({
+    url: '/item/editclass',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteClass(data) {
+  return request({
+    url: '/item/deleteclass',
+    method: 'post',
+    data
+  })
+}
