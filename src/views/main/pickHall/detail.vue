@@ -16,7 +16,7 @@
         </div>
         <div class="desc">
           <label class="label-class">物品描述：</label>
-          <div>{{ pickData.desc }}</div>
+          <div>{{ pickData.itemdesc }}</div>
         </div>
         <div class="contcat">
           <label class="label-class">联系方式：</label>

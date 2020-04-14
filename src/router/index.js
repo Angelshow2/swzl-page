@@ -115,32 +115,32 @@ export const constantRoutes = [
     ]
   },
 
-  // {
-  //   path: '/system',
-  //   component: Layout,
-  //   name: 'System',
-  //   meta: { title: '系统管理' },
-  //   children: [
-  //     {
-  //       path: 'usermanagement',
-  //       name: 'Usermanagement',
-  //       component: () => import('@/views/system/userManagement/index'),
-  //       meta: { title: '用户管理' }
-  //     },
-  //     {
-  //       path: 'itemmanagement',
-  //       name: 'Itemmanagement',
-  //       component: () => import('@/views/system/itemManagement/index'),
-  //       meta: { title: '物品管理' }
-  //     },
-  //     {
-  //       path: 'dictmanagement',
-  //       name: 'Dictmanagement',
-  //       component: () => import('@/views/system/dictManagement/index'),
-  //       meta: { title: '字典管理' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/system',
+    component: Layout,
+    name: 'System',
+    meta: { title: '系统管理' },
+    children: [
+      {
+        path: 'usermanagement',
+        name: 'Usermanagement',
+        component: () => import('@/views/system/userManagement/index'),
+        meta: { title: '用户管理' }
+      },
+      {
+        path: 'itemmanagement',
+        name: 'Itemmanagement',
+        component: () => import('@/views/system/itemManagement/index'),
+        meta: { title: '物品管理' }
+      },
+      {
+        path: 'dictmanagement',
+        name: 'Dictmanagement',
+        component: () => import('@/views/system/dictManagement/index'),
+        meta: { title: '字典管理' }
+      }
+    ]
+  },
 
   
 

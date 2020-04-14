@@ -25,7 +25,7 @@
         </div>
         <div class="detail">
           <div class="title">{{ item.title }}</div>
-          <div class="desc">{{ item.desc }}</div>
+          <div class="desc">{{ item.itemdesc }}</div>
         </div>
       </div>
     </div>

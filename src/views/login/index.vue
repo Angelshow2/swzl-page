@@ -6,7 +6,10 @@
       <div class="title">登&nbsp;&nbsp;&nbsp;&nbsp;录</div>
       <div class="form">
         <input v-model="loginForm.username" type="text" placeholder="请输入用户名">
-        <input v-model="loginForm.password" type="password" placeholder="请输入密码" @keydown.enter="handleLogin">
+        <div style="position: relative;">
+          <input :type="pwdType" v-model="loginForm.password" placeholder="请输入密码" @keydown.enter="handleLogin">
+          <img :src="require('./'+isEye+'.png')" class="pass-img" @click="watchPwd">
+        </div>
         <div class="tip">
           <div class="forget" @click="forget">忘记密码</div>
           <div class="register">没有账号?去 <router-link to="/register" style="color:#04599a;">注册</router-link></div>
@@ -34,7 +37,9 @@ export default {
         username: '',
         password: ''
       },
-      redirect: undefined
+      redirect: undefined,
+      isEye: 'beye',
+      pwdType: 'password'
     }
   },
   watch: {
@@ -43,6 +48,13 @@ export default {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
+    },
+    isEye: function(val) {
+      if(val === 'beye') {
+        this.pwdType = 'password'
+      } else if(val === 'eye') {
+        this.pwdType = 'text'
+      }
     }
   },
   methods: {
@@ -73,6 +85,13 @@ export default {
         type: 'info',
         duration: 5 * 1000
       })
+    },
+    watchPwd() {
+      if(this.isEye === 'beye') {
+        this.isEye = 'eye'
+      } else if(this.isEye === 'eye') {
+        this.isEye = 'beye'
+      }
     }
   }
 }
@@ -161,6 +180,15 @@ export default {
         background-image: linear-gradient(to right, #0a7ba4 , #04599a);
       }
       
+    }
+
+    .pass-img {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: 13px;
+      top: 8px;
+      cursor: pointer;
     }
   }
 

@@ -12,8 +12,8 @@
         <el-form-item label="物品标题" prop="title">
           <el-input v-model="pickData.title" type="text" placeholder="请输入标题" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="物品描述" prop="desc">
-          <el-input type="textarea" v-model="pickData.desc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
+        <el-form-item label="物品描述" prop="itemdesc">
+          <el-input type="textarea" v-model="pickData.itemdesc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
         </el-form-item>
         <el-form-item label="物品分类" prop="itemClass">
           <el-select style="width: 200px; margin-right: 20px;" v-model="pickData.itemClass" placeholder="请选择物品分类">
@@ -128,7 +128,7 @@ export default {
       pickData: {
         title: '',
         itemClass: null,
-        desc: '',
+        itemdesc: '',
         site: '',
         contcat: '',
         pickTime: '',
@@ -141,7 +141,7 @@ export default {
         itemClass: [
           { validator: checkItemClass, trigger: 'blur' }
         ],
-        desc: [
+        itemdesc: [
           { validator: checkDesc, trigger: 'blur' },
         ],
         site: [
@@ -208,7 +208,7 @@ export default {
         if(valid) {
           publishPick({
             title: this.pickData.title,
-            desc: this.pickData.desc,
+            itemdesc: this.pickData.itemdesc,
             itemclass: this.pickData.itemClass,
             img_url: this.pickData.imageUrl,
             occur_time: this.pickData.pickTime,
@@ -239,7 +239,7 @@ export default {
     dataInit() {
       this.pickData.title = ''
       this.pickData.itemClass = null
-      this.pickData.desc = ''
+      this.pickData.itemdesc = ''
       this.pickData.site = ''
       this.pickData.contcat = ''
       this.pickData.pickTime = ''

@@ -12,7 +12,7 @@
         </div>  
         <div class="item-content">
           <div class="item-title">{{ i.title }}</div>
-          <div class="item-desc">{{ i.desc }}</div>
+          <div class="item-desc">{{ i.itemdesc }}</div>
         </div>
         <div @click.stop="deleteItem(i.id, i.status)" class="el-icon-close delete-btn"></div>
       </div>
@@ -198,7 +198,7 @@ export default {
     height: 768px;
     border-radius: 4px;
     padding: 20px 40px;
-    box-shadow: 0 2px 15px 0 rgba(0,0,0,0.08);
+    // box-shadow: 0 2px 15px 0 rgba(0,0,0,0.08);
 
     .title {
       font-size: 20px;

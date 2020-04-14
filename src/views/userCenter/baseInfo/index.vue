@@ -6,6 +6,14 @@
       <div>{{ userInfo. account_id}}</div>
     </div>
     <div class="item">
+      <label style="margin-right: 10px;min-width: 75px;">账号状态:  </label>
+      <div>{{ userInfo. status_name}}</div>
+    </div>
+    <div class="item">
+      <label style="margin-right: 10px;min-width: 75px;">用户身份:  </label>
+      <div>{{ userInfo. auth_name}}</div>
+    </div>
+    <div class="item">
       <label style="margin-right: 10px;min-width: 75px;">用户姓名:  </label>
       <div>{{ userInfo.user_name }}</div>
     </div>
@@ -57,8 +65,10 @@ export default {
 
 <style lang="scss" scoped>
   .baseinfo-container {
+    width: 99%;
+    height: 99%;
     background-color: #fff;
-    height: 768px;
+    // height: 768px;
     border-radius: 4px;
     padding: 20px 40px;
     box-shadow: 0 2px 15px 0 rgba(0,0,0,0.08);

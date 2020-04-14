@@ -12,8 +12,8 @@
         <el-form-item label="物品标题" prop="title">
           <el-input v-model="lostData.title" type="text" placeholder="请输入标题" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="物品描述" prop="desc">
-          <el-input type="textarea" v-model="lostData.desc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
+        <el-form-item label="物品描述" prop="itemdesc">
+          <el-input type="textarea" v-model="lostData.itemdesc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
         </el-form-item>
         <el-form-item label="物品分类" prop="itemClass">
           <el-select style="width: 200px; margin-right: 20px;" v-model="lostData.itemClass" placeholder="请选择物品分类">
@@ -128,7 +128,7 @@ export default {
       lostData: {
         title: '',
         itemClass: null,
-        desc: '',
+        itemdesc: '',
         site: '',
         contcat: '',
         lostTime: '',
@@ -141,7 +141,7 @@ export default {
         itemClass: [
           { validator: checkItemClass, trigger: 'blur' }
         ],
-        desc: [
+        itemdesc: [
           { validator: checkDesc, trigger: 'blur' },
         ],
         site: [
@@ -208,7 +208,7 @@ export default {
         if(valid) {
           publishLost({
             title: this.lostData.title,
-            desc: this.lostData.desc,
+            itemdesc: this.lostData.itemdesc,
             itemclass: this.lostData.itemClass,
             img_url: this.lostData.imageUrl,
             occur_time: this.lostData.lostTime,
@@ -239,7 +239,7 @@ export default {
     dataInit() {
       this.lostData.title = ''
       this.lostData.itemClass = null
-      this.lostData.desc = ''
+      this.lostData.itemdesc = ''
       this.lostData.site = ''
       this.lostData.contcat = ''
       this.lostData.lostTime = ''

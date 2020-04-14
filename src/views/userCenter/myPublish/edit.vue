@@ -12,8 +12,8 @@
         <el-form-item label="物品标题" prop="title">
           <el-input :disabled="!btnFlag" v-model="formData.title" type="text" placeholder="请输入标题" style="width: 400px;"></el-input>
         </el-form-item>
-        <el-form-item label="物品描述" prop="desc">
-          <el-input :disabled="!btnFlag" type="textarea" v-model="formData.desc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
+        <el-form-item label="物品描述" prop="itemdesc">
+          <el-input :disabled="!btnFlag" type="textarea" v-model="formData.itemdesc" placeholder="请输入物品描述" :rows="3" style="width: 400px;"></el-input>
         </el-form-item>
         <el-form-item label="物品分类" prop="itemclass">
           <el-select :disabled="!btnFlag" style="width: 200px; margin-right: 20px;" v-model="formData.itemclass" placeholder="请选择物品分类">
@@ -134,7 +134,7 @@ export default {
       formData: {
         title: '',
         itemclass: null,
-        desc: '',
+        itemdesc: '',
         site: '',
         contcat: '',
         occur_time: '',
@@ -147,7 +147,7 @@ export default {
         itemclass: [
           { validator: checkItemClass, trigger: 'blur' }
         ],
-        desc: [
+        itemdesc: [
           { validator: checkDesc, trigger: 'blur' },
         ],
         site: [
@@ -213,7 +213,7 @@ export default {
           if(this.text === '丢失') {
             updateUserLost({
               title: this.formData.title,
-              desc: this.formData.desc,
+              itemdesc: this.formData.itemdesc,
               itemclass: this.formData.itemclass,
               img_url: this.formData.img_url,
               occur_time: this.formData.occur_time,
@@ -236,7 +236,7 @@ export default {
           } else if(this.text === '拾取') {
             updateUserPick({
               title: this.formData.title,
-              desc: this.formData.desc,
+              itemdesc: this.formData.itemdesc,
               itemclass: this.formData.itemclass,
               img_url: this.formData.img_url,
               occur_time: this.formData.occur_time,

@@ -6,7 +6,10 @@
       <div class="title">注&nbsp;&nbsp;&nbsp;&nbsp;册</div>
       <div class="form">
         <input type="text" v-model="formData.account_id" placeholder="请输入账号(6-18位字母或数字)">
-        <input type="password" v-model="formData.password" placeholder="请输入密码(6-18位字母或数字)">
+        <div style="position: relative;">
+          <input :type="pwdType" v-model="formData.password" placeholder="请输入密码(6-18位字母或数字)">
+          <img :src="require('./'+isEye+'.png')" class="pass-img" @click="watchPwd">
+        </div>
         <el-select v-model="formData.user_depart" placeholder="请选择" @change="departChange">
           <el-option
             v-for="item in departList"
@@ -58,11 +61,22 @@ export default {
         user_id: null,
       },
       departList: [],
-      majorList: []
+      majorList: [],
+      isEye: 'beye',
+      pwdType: 'password'
     }
   },
   created() {
     this.getDepartList()
+  },
+  watch: {
+    isEye: function(val) {
+      if(val === 'beye') {
+        this.pwdType = 'password'
+      } else if(val === 'eye') {
+        this.pwdType = 'text'
+      }
+    }
   },
   methods: {
     handleRegister() {
@@ -122,7 +136,7 @@ export default {
           duration: 5 * 1000
         })
       }
-      register(this.formData)
+    register(this.formData)
         .then(res => {
           console.log(res)
           if(res.code === 200) {
@@ -160,6 +174,13 @@ export default {
     departChange() {
       this.formData.user_major = null
       this.getMajorList()
+    },
+    watchPwd() {
+      if(this.isEye === 'beye') {
+        this.isEye = 'eye'
+      } else if(this.isEye === 'eye') {
+        this.isEye = 'beye'
+      }
     }
   }
 }
@@ -261,6 +282,15 @@ export default {
     border-radius: 0;
     color: #fff;
     font-size: 16px;
+  }
+
+  .pass-img {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 13px;
+    top: 8px;
+    cursor: pointer;
   }
 
 </style>
