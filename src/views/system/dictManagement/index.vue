@@ -207,7 +207,7 @@
 <script>
 
 import { getDepartList, getMajorList } from '@/api/user.js'
-import { newMajor, newDepart, editDepart, editMajor } from '@/api/system/index.js'
+import { newMajor, newDepart, editDepart, editMajor, deleteDepart, deleteMajor } from '@/api/system/index.js'
 import { Message } from 'element-ui'
 
 export default {
@@ -402,9 +402,40 @@ export default {
     },
     sureDeleteDepart() {
       console.log(this.deleteDepartData)
+      deleteDepart({
+        account_id: this.$store.state.user.accountid,
+        oldValue: this.deleteDepartData.oldValue
+      })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '删除成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.cancelDelete()
+          this.listLoadingThree = true
+          this.getDepartList()
+        })
     },
     sureDeleteMajor() {
       console.log(this.deleteMajorData)
+      deleteMajor({
+        account_id: this.$store.state.user.accountid,
+        oldValue: this.deleteMajorData.oldValue
+      })
+        .then(res => {
+          console.log(res)
+          Message({
+            message: '删除成功!',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.cancelDelete()
+          this.listLoadingThree = true
+          this.getDepartList()
+        })
+
     },
     editDepartChange(e) {
       this.editDepartData.value = e

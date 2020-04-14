@@ -118,3 +118,19 @@ export function editMajor(data) {
     data
   })
 }
+
+export function deleteDepart(data) {
+  return request({
+    url: '/item/deletedepart',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteMajor(data) {
+  return request({
+    url: '/item/deletemajor',
+    method: 'post',
+    data
+  })
+}
