@@ -39,6 +39,9 @@ export default {
   },
   mixins: [ResizeMixin],
   computed: {
+    sideBarFlag() {
+      return this.$store.state.user.sideBarFlag
+    },
     sidebar() {
       return this.$store.state.app.sidebar
     },

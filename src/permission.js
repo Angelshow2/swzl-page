@@ -4,6 +4,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
+import { asyncRouterMap, notFound } from '@/router'
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -28,7 +29,17 @@ router.beforeEach(async(to, from, next) => {
     } else {
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
+        store.dispatch('user/getRoutes')
+          .then(res => {
+            if(res.flag) {
+              router.addRoutes(asyncRouterMap)
+            }
+            localStorage.setItem('routes', res.routes)
+            router.addRoutes(notFound)
+          })
+        
         next()
+       
       } else {
         try {
           // get user info
@@ -39,6 +50,7 @@ router.beforeEach(async(to, from, next) => {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
+          // next(`/login`)
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }
@@ -52,6 +64,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
+      next(`/login`)
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }

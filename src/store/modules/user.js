@@ -1,11 +1,15 @@
 import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { resetRouter, asyncRouterMap, constantRoutes, notFound } from '@/router'
+import router from '@/router'
+
 
 const state = {
   token: getToken(),
   name: localStorage.getItem("name"),
-  accountid: localStorage.getItem("accountid")
+  accountid: localStorage.getItem("accountid"),
+  role: localStorage.getItem("auth"),
+  routes: []
 }
 
 const mutations = {
@@ -17,7 +21,20 @@ const mutations = {
   },
   SET_ACCOUNTID: (state, accountid) => {
     state.accountid = accountid
+  },
+  SET_AUTH: (state, role) => {
+    state.role = role
+  },
+  SET_ROUTES: (state, flag) => {
+    if(flag) {
+      state.routes = constantRoutes.concat(asyncRouterMap)
+    } else {
+      console.log(notFound)
+      state.routes = constantRoutes.concat(notFound)
+    }
+    
   }
+  
 }
 
 const actions = {
@@ -29,11 +46,14 @@ const actions = {
         const { data } = response
         console.log(response)
         commit('SET_TOKEN', data.token)
+        commit('SET_AUTH', data.role)
         commit('SET_NAME', data.name)
         commit('SET_ACCOUNTID', data.accountid)
         localStorage.setItem("accountid",data.accountid);
         localStorage.setItem("name",data.name);
+        localStorage.setItem("auth",data.role);
         setToken(data.token)
+        
         resolve()
       }).catch(error => {
         reject(error)
@@ -41,6 +61,19 @@ const actions = {
     })
   },
 
+  getRoutes({ commit }) {
+    return new Promise((resolve, reject) => {
+      if(state.role === 'super_admin' || state.role === 'admin') {
+        commit('SET_ROUTES', true)
+        resolve({routes: state.routes, flag: true})
+      } else {
+        commit('SET_ROUTES', false)
+        resolve({routes: state.routes, flag: false})
+      }
+      
+        
+    })
+  },
 
 
   // get user info
@@ -67,6 +100,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       removeToken()
+      resetRouter()
       localStorage.removeItem('name')
       localStorage.removeItem('accountid')
       resolve()

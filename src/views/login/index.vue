@@ -27,6 +27,8 @@
 
 import { loginin } from '@/api/user'
 import { Message } from 'element-ui'
+import { asyncRouterMap } from '@/router/index'
+
 
 export default {
   name: 'Login',
@@ -73,6 +75,7 @@ export default {
         })
       }
       this.$store.dispatch('user/login', this.loginForm).then(() => {
+        
         this.$router.push({ path: this.redirect || '/' })
         this.loading = false
       }).catch(() => {

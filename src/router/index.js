@@ -114,7 +114,18 @@ export const constantRoutes = [
       }
     ]
   },
+  
 
+  
+
+  // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
+]
+
+
+//异步挂载的路由
+//动态需要根据权限加载的路由表 
+export const asyncRouterMap = [
   {
     path: '/system',
     component: Layout,
@@ -142,11 +153,15 @@ export const constantRoutes = [
     ]
   },
 
+  { path: '*', redirect: '/404', hidden: true }
   
+]
 
-  // 404 page must be placed at the end !!!
+export const notFound = [
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
@@ -155,6 +170,9 @@ const createRouter = () => new Router({
 })
 
 const router = createRouter()
+
+// router.addRoutes(asyncRouterMap)
+
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
