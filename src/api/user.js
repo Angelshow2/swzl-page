@@ -40,6 +40,14 @@ export function getUserInfo(data) {
 }
 
 
+export function resetPwd(data) {
+  return request({
+    url: '/item/resetpwd',
+    method: 'post',
+    data
+  })
+}
+
 
 // export function getInfo(token) {
 //   return request({
