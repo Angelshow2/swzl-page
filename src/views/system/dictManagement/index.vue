@@ -303,6 +303,8 @@
 
 <script>
 
+import { getAllMajor } from '@/api/system/index.js'
+
 import { getDepartList, getMajorList } from '@/api/user.js'
 import { getItemClass } from '@/api/lostHall/index'
 import { newMajor, newDepart, editDepart, editMajor, deleteDepart, deleteMajor, addClass, editClass, deleteClass } from '@/api/system/index.js'
@@ -313,6 +315,7 @@ export default {
     return {
       departMajorList: [],
       deparList: [],
+      majorList: [],
       itemClass: [],
       itemClassList: [
         {
@@ -390,33 +393,32 @@ export default {
     handleNodeClick(data) {
       console.log(data);
     },
-    getDepartList() {
-      getDepartList()
+   
+    getDepartList() { 
+      getAllMajor()
         .then(res => {
-          let data = res.data
-          this.departList = data
-          for(let i in data) {
-            this.getMajorList(data[i].value)
-              .then(res => {
-                data[i].children = res
+          this.majorList = res.data
+          getDepartList()
+            .then(res => {
+              let data = res.data
+              this.departList = data
+              for(let i in data) {
+                data[i].children = []
+                for(let j in this.majorList) {
+                  if(this.majorList[j].parent_depart === data[i].value) {
+                    data[i].children.push(this.majorList[j])
+                  }
+                }
                 if(i == data.length-1) {
                   this.departMajorList = data
                   this.listLoadingOne = false
                 }
-              })
-          }
+              }
+            })
         })
+      
     },
-    getMajorList(code) {
-      return new Promise((resolve, reject) => {
-        getMajorList({
-          value: code
-        })
-          .then(res => {
-            resolve(res.data)
-          })
-      })
-    },
+
     addItem() {
       this.dialogFlagOne = true
       this.shadeFlag = true

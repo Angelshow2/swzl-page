@@ -158,3 +158,11 @@ export function deleteClass(data) {
     data
   })
 }
+
+export function getAllMajor(data) {
+  return request({
+    url: '/user/allmajor',
+    method: 'post',
+    data
+  })
+}
