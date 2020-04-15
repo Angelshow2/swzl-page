@@ -52,6 +52,7 @@
             <el-button
               circle
               size="mini"
+              :disabled="scoped.row.auth==='super_admin'"
               :type="scoped.row.status===1?'success':'danger'"
               @click="changeStatus(scoped.row)"
             >
@@ -59,12 +60,12 @@
             </el-button>
           </el-tooltip>
           <el-tooltip effect="light" content="重置密码" placement="top">
-            <el-button circle size="mini" type="warning" @click="initPwd(scoped.row)">
+            <el-button :disabled="scoped.row.auth==='super_admin'" circle size="mini" type="warning" @click="initPwd(scoped.row)">
               <i class="el-icon-refresh"></i>
             </el-button>
           </el-tooltip>
           <el-tooltip effect="light" content="删除" placement="top">
-            <el-button circle size="mini" type="danger" @click="deleteUser(scoped.row)">
+            <el-button :disabled="scoped.row.auth==='super_admin'" circle size="mini" type="danger" @click="deleteUser(scoped.row)">
               <i class="el-icon-delete"></i>
             </el-button>
           </el-tooltip>
