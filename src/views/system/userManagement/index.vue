@@ -41,6 +41,7 @@
             <el-button
               circle
               size="mini"
+              v-if="auth === 'super_admin'"
               :disabled="scoped.row.auth==='super_admin'"
               :type="scoped.row.auth==='admin'?'warning':'primary'"
               @click="setAdmin(scoped.row)"
@@ -52,7 +53,7 @@
             <el-button
               circle
               size="mini"
-              :disabled="scoped.row.auth==='super_admin'"
+              :disabled="scoped.row.auth==='super_admin' || accountid === scoped.row.account_id"
               :type="scoped.row.status===1?'success':'danger'"
               @click="changeStatus(scoped.row)"
             >
@@ -65,7 +66,7 @@
             </el-button>
           </el-tooltip>
           <el-tooltip effect="light" content="删除" placement="top">
-            <el-button :disabled="scoped.row.auth==='super_admin'" circle size="mini" type="danger" @click="deleteUser(scoped.row)">
+            <el-button v-if="auth === 'super_admin'" :disabled="scoped.row.auth==='super_admin'" circle size="mini" type="danger" @click="deleteUser(scoped.row)">
               <i class="el-icon-delete"></i>
             </el-button>
           </el-tooltip>
@@ -120,6 +121,14 @@ export default {
     this.getAuthList();
   },
   filters: {},
+  computed: {
+    auth() {
+      return this.$store.state.user.role
+    },
+    accountid() {
+      return this.$store.state.user.accountid
+    }
+  },
   methods: {
     getUserList() {
       getUserList({

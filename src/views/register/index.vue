@@ -10,7 +10,7 @@
           <input :type="pwdType" v-model="formData.password" placeholder="请输入密码(6-18位字母或数字)">
           <img :src="require('./'+isEye+'.png')" class="pass-img" @click="watchPwd">
         </div>
-        <el-select v-model="formData.user_depart" placeholder="请选择" @change="departChange">
+        <el-select v-model="formData.user_depart" placeholder="请选择院系" @change="departChange">
           <el-option
             v-for="item in departList"
             :key="item.value"
@@ -18,7 +18,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-select v-model="formData.user_major" placeholder="请选择">
+        <el-select v-model="formData.user_major" placeholder="请选择专业">
           <el-option
             v-for="item in majorList"
             :key="item.value"
