@@ -61,7 +61,7 @@
             </el-button>
           </el-tooltip>
           <el-tooltip effect="light" content="重置密码" placement="top">
-            <el-button :disabled="scoped.row.auth==='super_admin'" circle size="mini" type="warning" @click="initPwd(scoped.row)">
+            <el-button :disabled="scoped.row.auth==='super_admin' || accountid === scoped.row.account_id" circle size="mini" type="warning" @click="initPwd(scoped.row)">
               <i class="el-icon-refresh"></i>
             </el-button>
           </el-tooltip>
